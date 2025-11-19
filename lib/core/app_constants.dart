@@ -26,3 +26,5 @@ TextStyle kLoginOrSignUpTextStyle(
     );
 
 TextStyle kTextFormFieldStyle() => const TextStyle(color: Colors.black);
+
+final GeminiAPIKey = 'AIzaSyC-YaQ-Pl9mnP8LFIXu9qzwiv409c2hSJw';

@@ -10,6 +10,7 @@ import '../../business_logic/blocs/theme/theme_bloc.dart';
 import '../../data/model/food.dart';
 import '../../data/model/food_category.dart';
 import '../widget/food_list_view.dart';
+import '../widget/ai_floating_button.dart'; // Add this import
 
 class FoodListScreen extends StatelessWidget {
   const FoodListScreen({super.key});
@@ -33,7 +34,7 @@ class FoodListScreen extends StatelessWidget {
           icon: Badge(
             badgeStyle: const BadgeStyle(badgeColor: LightThemeColor.accent),
             badgeContent:
-                const Text("2", style: TextStyle(color: Colors.white)),
+            const Text("2", style: TextStyle(color: Colors.white)),
             position: BadgePosition.topStart(start: -3),
             child: const Icon(Icons.notifications_none, size: 30),
           ),
@@ -64,6 +65,9 @@ class FoodListScreen extends StatelessWidget {
 
     final List<Food> filteredFood =
         context.watch<CategoryBloc>().state.foodList;
+
+    // Get meal names for AI recommendations
+    final List<String> mealNames = foodList.map((f) => f.name).toList();
 
     return Scaffold(
       appBar: _appBar(context),
@@ -152,6 +156,8 @@ class FoodListScreen extends StatelessWidget {
           ),
         ),
       ),
+      // Add the AI floating button here
+      floatingActionButton: AIFloatingButton(),
     );
   }
 }
