@@ -7,16 +7,26 @@ import 'package:smart_restaurant_finder/src/business_logic/blocs/food/food_bloc.
 import 'package:smart_restaurant_finder/src/business_logic/blocs/theme/theme_bloc.dart';
 import 'package:smart_restaurant_finder/src/data/repository/repository.dart';
 import 'package:smart_restaurant_finder/src/presentation/screen/auth/login_screen.dart';
-import 'package:smart_restaurant_finder/src/presentation/screen/home_screen.dart';
+import 'package:smart_restaurant_finder/core/services/connection_service.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void dispose() {
+    ConnectionService.dispose(); // Clean up connectivity subscription
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider<Repository>(
@@ -24,12 +34,10 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<FoodBloc>(
-            create: (context) =>
-                FoodBloc(repository: context.read<Repository>()),
+            create: (context) => FoodBloc(repository: context.read<Repository>()),
           ),
           BlocProvider<CategoryBloc>(
-            create: (context) =>
-                CategoryBloc(repository: context.read<Repository>()),
+            create: (context) => CategoryBloc(repository: context.read<Repository>()),
           ),
           BlocProvider<ThemeBloc>(
             create: (context) => ThemeBloc(),
@@ -46,7 +54,15 @@ class MyApp extends StatelessWidget {
                 },
               ),
               theme: state.theme,
-              home: LoginView(),
+              home: Builder(
+                builder: (context) {
+                  // Initialize connection service after first frame
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    ConnectionService.initialize(context);
+                  });
+                  return const LoginView();
+                },
+              ),
             );
           },
         ),
@@ -54,4 +70,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
