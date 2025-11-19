@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../../core/app_constants.dart';
+import 'authui_controller.dart';
+import 'login_screen.dart';
+
 
 class SignUpView extends StatefulWidget {
-  const SignUpView({Key? key}) : super(key: key);
+  const SignUpView({super.key});
 
   @override
   State<SignUpView> createState() => _SignUpViewState();
@@ -61,7 +65,7 @@ class _SignUpViewState extends State<SignUpView> {
           child: RotatedBox(
             quarterTurns: 3,
             child: Lottie.asset(
-              'assets/coin.json',
+              'assets/smatech_t_logo.json',
               height: size.height * 0.3,
               width: double.infinity,
               fit: BoxFit.fill,
@@ -96,7 +100,7 @@ class _SignUpViewState extends State<SignUpView> {
         size.width > 600
             ? Container()
             : Lottie.asset(
-          'assets/wave.json',
+          'assets/smatech_logo.json',
           height: size.height * 0.2,
           width: size.width,
           fit: BoxFit.fill,
@@ -278,8 +282,8 @@ class _SignUpViewState extends State<SignUpView> {
       height: 55,
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.deepPurpleAccent),
-          shape: MaterialStateProperty.all(
+          backgroundColor: WidgetStateProperty.all(Colors.deepPurpleAccent),
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_japanese_restaurant_app/core/app_data.dart';
-import 'package:flutter_japanese_restaurant_app/src/presentation/screen/cart_screen.dart';
-import 'package:flutter_japanese_restaurant_app/src/presentation/screen/profile_screen.dart';
-import 'package:flutter_japanese_restaurant_app/src/presentation/screen/favorite_screen.dart';
-import 'package:flutter_japanese_restaurant_app/src/presentation/screen/food_list_screen.dart';
-import 'package:flutter_japanese_restaurant_app/src/presentation/animation/page_transition.dart';
+import 'package:smart_restaurant_finder/src/presentation/screen/profile_screen.dart';
+
+import '../animation/page_transition.dart';
+import 'cart_screen.dart';
+import 'favorite_screen.dart';
+import 'food_list_screen.dart';
 
 class HomeScreen extends HookWidget {
   HomeScreen({super.key});
@@ -27,15 +27,28 @@ class HomeScreen extends HookWidget {
         currentIndex: selectedIndex.value,
         onTap: (int index) => selectedIndex.value = index,
         selectedFontSize: 0,
-        items: AppData.bottomNavigationItems.map(
-          (element) {
-            return BottomNavigationBarItem(
-              icon: element.disableIcon,
-              label: element.label,
-              activeIcon: element.enableIcon,
-            );
-          },
-        ).toList(),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart_outlined),
+            activeIcon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_outline),
+            activeIcon: Icon(Icons.favorite),
+            label: 'Favorites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outlined),
+            activeIcon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }

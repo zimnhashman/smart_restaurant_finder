@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_japanese_restaurant_app/core/app_icon.dart';
-import 'package:flutter_japanese_restaurant_app/src/data/model/bottom_navigation_item.dart';
+
+import '../src/data/model/bottom_navigation_item.dart';
+import 'app_icon.dart';
 
 class AppData {
   const AppData._();

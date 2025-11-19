@@ -1,4 +1,13 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_restaurant_finder/src/business_logic/blocs/category/category_bloc.dart';
+import 'package:smart_restaurant_finder/src/business_logic/blocs/food/food_bloc.dart';
+import 'package:smart_restaurant_finder/src/business_logic/blocs/theme/theme_bloc.dart';
+import 'package:smart_restaurant_finder/src/data/repository/repository.dart';
+import 'package:smart_restaurant_finder/src/presentation/screen/auth/login_screen.dart';
+import 'package:smart_restaurant_finder/src/presentation/screen/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,7 +46,7 @@ class MyApp extends StatelessWidget {
                 },
               ),
               theme: state.theme,
-              home: HomeScreen(),
+              home: LoginView(),
             );
           },
         ),

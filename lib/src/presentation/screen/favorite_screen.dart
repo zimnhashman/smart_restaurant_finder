@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_japanese_restaurant_app/core/app_icon.dart';
-import 'package:flutter_japanese_restaurant_app/core/app_color.dart';
-import 'package:flutter_japanese_restaurant_app/core/app_extension.dart';
-import 'package:flutter_japanese_restaurant_app/src/business_logic/blocs/theme/theme_bloc.dart';
-import 'package:flutter_japanese_restaurant_app/src/data/model/food.dart';
-import 'package:flutter_japanese_restaurant_app/src/business_logic/blocs/food/food_bloc.dart';
-import 'package:flutter_japanese_restaurant_app/src/presentation/widget/empty_widget.dart';
+
+import '../../../core/app_color.dart';
+import '../../../core/app_extension.dart';
+import '../../../core/app_icon.dart';
+import '../../business_logic/blocs/food/food_bloc.dart';
+import '../../business_logic/blocs/theme/theme_bloc.dart';
+import '../../data/model/food.dart';
+import '../widget/empty_widget.dart';
 
 class FavoriteScreen extends StatelessWidget {
   const FavoriteScreen({super.key});
@@ -52,7 +53,7 @@ class FavoriteScreen extends StatelessWidget {
               ),
             ).fadeAnimation(index * 0.6);
           },
-          separatorBuilder: (_, __) {
+          separatorBuilder: (_, _) {
             return const Padding(padding: EdgeInsets.only(bottom: 15));
           },
         ),
