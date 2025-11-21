@@ -1,18 +1,20 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../core/app_color.dart';
 import '../../../core/app_extension.dart';
+import '../../../core/services/auth_service.dart'; // ✅ import AuthService
 import '../../business_logic/blocs/category/category_bloc.dart';
 import '../../business_logic/blocs/food/food_bloc.dart' show FoodBloc;
 import '../../business_logic/blocs/theme/theme_bloc.dart';
 import '../../data/model/food.dart';
 import '../../data/model/food_category.dart';
 import '../widget/food_list_view.dart';
-import '../widget/ai_floating_button.dart'; // Add this import
+import '../widget/ai_floating_button.dart';
 
-class FoodListScreen extends StatelessWidget {
+class FoodListScreen extends HookWidget {
   const FoodListScreen({super.key});
 
   PreferredSizeWidget _appBar(BuildContext context) {
@@ -25,7 +27,7 @@ class FoodListScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(Icons.location_on_outlined, color: LightThemeColor.accent),
-          Text("Location", style: Theme.of(context).textTheme.bodyLarge)
+          Text("Location", style: Theme.of(context).textTheme.bodyLarge),
         ],
       ),
       actions: [
@@ -33,8 +35,7 @@ class FoodListScreen extends StatelessWidget {
           onPressed: () {},
           icon: Badge(
             badgeStyle: const BadgeStyle(badgeColor: LightThemeColor.accent),
-            badgeContent:
-            const Text("2", style: TextStyle(color: Colors.white)),
+            badgeContent: const Text("2", style: TextStyle(color: Colors.white)),
             position: BadgePosition.topStart(start: -3),
             child: const Icon(Icons.notifications_none, size: 30),
           ),
@@ -56,18 +57,37 @@ class FoodListScreen extends StatelessWidget {
     );
   }
 
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) {
+      return "Morning";
+    } else if (hour < 17) {
+      return "Afternoon";
+    } else {
+      return "Evening";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<Food> foodList = context.watch<FoodBloc>().state.foodList;
+    final username = useState<String>("Food Hunter");
 
+    // ✅ Load username once after widget mounts
+    useEffect(() {
+      Future.microtask(() async {
+        final user = await AuthService.getCurrentUser();
+        if (user != null && user['name'] != null) {
+          username.value = user['name'];
+        }
+      });
+      return null;
+    }, []);
+
+    final List<Food> foodList = context.watch<FoodBloc>().state.foodList;
     final List<FoodCategory> categories =
         context.watch<CategoryBloc>().state.foodCategories;
-
     final List<Food> filteredFood =
         context.watch<CategoryBloc>().state.foodList;
-
-    // Get meal names for AI recommendations
-    final List<String> mealNames = foodList.map((f) => f.name).toList();
 
     return Scaffold(
       appBar: _appBar(context),
@@ -78,7 +98,7 @@ class FoodListScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Morning, Sina",
+                "${_getGreeting()}, ${username.value}",
                 style: Theme.of(context).textTheme.headlineSmall,
               ).fadeAnimation(0.2),
               Text(
@@ -86,10 +106,8 @@ class FoodListScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.displayLarge,
               ).fadeAnimation(0.4),
               _searchBar(),
-              Text(
-                "Available for you",
-                style: Theme.of(context).textTheme.displaySmall,
-              ),
+              Text("Available for you",
+                  style: Theme.of(context).textTheme.displaySmall),
               Padding(
                 padding: const EdgeInsets.only(top: 15),
                 child: SizedBox(
@@ -111,9 +129,8 @@ class FoodListScreen extends StatelessWidget {
                             color: category.isSelected
                                 ? LightThemeColor.accent
                                 : Colors.transparent,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
-                            ),
+                            borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
                           ),
                           child: Text(
                             category.type.name.toCapital,
@@ -122,9 +139,8 @@ class FoodListScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    separatorBuilder: (_, _) {
-                      return const Padding(padding: EdgeInsets.only(right: 15));
-                    },
+                    separatorBuilder: (_, _) =>
+                    const Padding(padding: EdgeInsets.only(right: 15)),
                   ),
                 ),
               ),
@@ -134,19 +150,15 @@ class FoodListScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "Best food of the week",
-                      style: Theme.of(context).textTheme.displaySmall,
-                    ),
+                    Text("Best food of the week",
+                        style: Theme.of(context).textTheme.displaySmall),
                     Padding(
                       padding: const EdgeInsets.only(right: 20),
-                      child: Text(
-                        "See all",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(color: LightThemeColor.accent),
-                      ),
+                      child: Text("See all",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(color: LightThemeColor.accent)),
                     ),
                   ],
                 ),
@@ -156,8 +168,7 @@ class FoodListScreen extends StatelessWidget {
           ),
         ),
       ),
-      // Add the AI floating button here
-      floatingActionButton: AIFloatingButton(),
+      floatingActionButton: const AIFloatingButton(),
     );
   }
 }

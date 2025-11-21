@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_restaurant_finder/src/business_logic/blocs/connectivity/connectivity_bloc.dart';
 import 'package:smart_restaurant_finder/src/presentation/screen/profile_screen.dart';
 
 import '../animation/page_transition.dart';
@@ -21,35 +23,58 @@ class HomeScreen extends HookWidget {
   Widget build(BuildContext context) {
     final selectedIndex = useState(0);
 
-    return Scaffold(
-      body: PageTransition(child: screen[selectedIndex.value]),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex.value,
-        onTap: (int index) => selectedIndex.value = index,
-        selectedFontSize: 0,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
+    return BlocBuilder<ConnectivityBloc, ConnectivityState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: Column(
+            children: [
+
+              if (state is ConnectivityDisconnected)
+                Container(
+                  width: double.infinity,
+                  color: Colors.red,
+                  padding: const EdgeInsets.all(8),
+                  child: const Text(
+                    'No Internet Connection',
+                    style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+              Expanded(
+                child: PageTransition(child: screen[selectedIndex.value]),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart_outlined),
-            activeIcon: Icon(Icons.shopping_cart),
-            label: 'Cart',
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: selectedIndex.value,
+            onTap: (int index) => selectedIndex.value = index,
+            selectedFontSize: 0,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                activeIcon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_cart_outlined),
+                activeIcon: Icon(Icons.shopping_cart),
+                label: 'Cart',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite_outline),
+                activeIcon: Icon(Icons.favorite),
+                label: 'Favorites',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outlined),
+                activeIcon: Icon(Icons.person),
+                label: 'Profile',
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_outline),
-            activeIcon: Icon(Icons.favorite),
-            label: 'Favorites',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outlined),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

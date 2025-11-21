@@ -2,14 +2,17 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:smart_restaurant_finder/src/business_logic/blocs/category/category_bloc.dart';
 import 'package:smart_restaurant_finder/src/business_logic/blocs/food/food_bloc.dart';
 import 'package:smart_restaurant_finder/src/business_logic/blocs/theme/theme_bloc.dart';
+import 'package:smart_restaurant_finder/src/business_logic/blocs/connectivity/connectivity_bloc.dart'; // ✅ add this
 import 'package:smart_restaurant_finder/src/data/repository/repository.dart';
+import 'package:smart_restaurant_finder/src/presentation/screen/auth/authui_controller.dart';
 import 'package:smart_restaurant_finder/src/presentation/screen/auth/login_screen.dart';
-import 'package:smart_restaurant_finder/core/services/connection_service.dart';
 
 void main() {
+  Get.put(SimpleUIController());
   runApp(const MyApp());
 }
 
@@ -23,7 +26,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
-    ConnectionService.dispose(); // Clean up connectivity subscription
     super.dispose();
   }
 
@@ -42,10 +44,13 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<ThemeBloc>(
             create: (context) => ThemeBloc(),
           ),
+          BlocProvider<ConnectivityBloc>(
+            create: (context) => ConnectivityBloc(), // ✅ global connectivity
+          ),
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(
           builder: (context, state) {
-            return MaterialApp(
+            return GetMaterialApp(
               debugShowCheckedModeBanner: false,
               scrollBehavior: const MaterialScrollBehavior().copyWith(
                 dragDevices: {
@@ -54,15 +59,7 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               theme: state.theme,
-              home: Builder(
-                builder: (context) {
-                  // Initialize connection service after first frame
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    ConnectionService.initialize(context);
-                  });
-                  return const LoginView();
-                },
-              ),
+              home: const LoginView(),
             );
           },
         ),

@@ -24,6 +24,14 @@ dependencies:
   lottie: ^3.3.2
   firebase_ai: ^3.6.0
   connectivity_plus: ^7.0.0
+  url_launcher: ^6.3.0
+
+  #Sign-In
+  google_sign_in: ^7.2.0
+  flutter_facebook_auth: ^7.1.2
+  shared_preferences: ^2.5.3
+  flutter_secure_storage: ^9.2.4
+  sign_in_with_apple: ^7.0.1
 
 dev_dependencies:
   flutter_test:

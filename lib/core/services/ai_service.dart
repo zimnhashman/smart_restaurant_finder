@@ -69,7 +69,8 @@ class SimpleAIService {
       final response = await _model.generateContent([Content.text(prompt)]);
       return response.text ?? 'Let me find the perfect Harare restaurant for you!';
     } catch (e) {
-      return 'I\'m having trouble connecting. Please try again or ask our staff for Harare recommendations!';
+      // Just return a message. The UI will decide to show a WhatsApp button.
+      return 'I\'m having trouble connecting. Please try again or tap the WhatsApp button to reach us!';
     }
   }
 }

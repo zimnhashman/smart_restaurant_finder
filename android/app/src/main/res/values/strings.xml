@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App name -->
+    <string name="app_name">Smart Restaurant Finder</string>
+
+    <!-- Facebook SDK values -->
+    <string name="facebook_app_id">1150829457229545</string>
+    <string name="facebook_client_token">ab837cccad1149adf01da1565bbb0b4b</string>
+    <string name="fb_login_protocol_scheme">fb1150829457229545</string>
+</resources>
